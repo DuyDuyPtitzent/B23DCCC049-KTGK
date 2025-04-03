@@ -1,7 +1,7 @@
 import { Form, Input, Select, Button, Modal, InputNumber } from "antd";
 import { Employee } from "@/models/Nhanvien/Nhanvien";
 import { positions, departments } from "@/services/Nhanvien";
-import { useEffect } from "react"; // Thêm import này
+import { useEffect } from "react";
 
 interface EmployeeFormProps {
   visible: boolean;
@@ -13,20 +13,19 @@ interface EmployeeFormProps {
 export const EmployeeForm = ({ visible, employee, onSave, onCancel }: EmployeeFormProps) => {
   const [form] = Form.useForm();
 
-  // Cập nhật form khi employee thay đổi
   useEffect(() => {
     if (visible) {
       if (employee) {
-        form.setFieldsValue(employee); // Điền dữ liệu nhân viên vào form
+        form.setFieldsValue(employee);
       } else {
-        form.resetFields(); // Reset form nếu không có employee (thêm mới)
+        form.resetFields();
       }
     }
   }, [employee, visible, form]);
 
   const onFinish = (values: any) => {
     onSave(values);
-    form.resetFields(); // Reset sau khi lưu
+    form.resetFields();
   };
 
   return (
@@ -43,7 +42,10 @@ export const EmployeeForm = ({ visible, employee, onSave, onCancel }: EmployeeFo
           rules={[
             { required: true, message: "Vui lòng nhập họ tên!" },
             { max: 50, message: "Họ tên tối đa 50 ký tự!" },
-            { pattern: /^[a-zA-Z\s]+$/, message: "Họ tên không được chứa ký tự đặc biệt!" },
+            {
+              pattern: /^[^\@\#\$\%\^\&\*\(\)\!\+\=]+$/,
+              message: "Họ tên không được chứa ký tự đặc biệt như @, !, ...!",
+            },
           ]}
         >
           <Input />
@@ -56,7 +58,7 @@ export const EmployeeForm = ({ visible, employee, onSave, onCancel }: EmployeeFo
           <Select>
             {positions.map((position: string) => (
               <Select.Option key={position} value={position}>
-              {position}
+                {position}
               </Select.Option>
             ))}
           </Select>
@@ -69,7 +71,7 @@ export const EmployeeForm = ({ visible, employee, onSave, onCancel }: EmployeeFo
           <Select>
             {departments.map((department: string) => (
               <Select.Option key={department} value={department}>
-              {department}
+                {department}
               </Select.Option>
             ))}
           </Select>
