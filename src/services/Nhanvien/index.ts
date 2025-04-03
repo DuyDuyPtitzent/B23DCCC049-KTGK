@@ -1,10 +1,18 @@
-import {Employee} from "@/models/Nhanvien/Nhanvien";
-import {message} from "antd";
+import { Employee } from "@/models/Nhanvien/Nhanvien";
+import { message } from "antd";
 
 const LOCAL_STORAGE_KEY = "employees";
 // Danh sách chức vụ và phòng ban giả định
-export const positions = ["Nhân viên", "Trưởng phòng", "Giám đốc"," Quản lý",];
-export const departments = ["Phòng IT", "Phòng HR", "Phòng Marketing", "Phòng Kinh doanh", "Phòng Tài chính","Phòng kế toán","Phòng Hỗ trợ khách hàng"];
+export const positions = ["Nhân viên", "Trưởng phòng", "Giám đốc", "Quản lý"];
+export const departments = [
+  "Phòng IT",
+  "Phòng HR",
+  "Phòng Marketing",
+  "Phòng Kinh doanh",
+  "Phòng Tài chính",
+  "Phòng kế toán",
+  "Phòng Hỗ trợ khách hàng",
+];
 
 export const getEmployees = (): Employee[] => {
   const data = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -18,8 +26,8 @@ export const saveEmployees = (employees: Employee[]) => {
 export const addEmployee = (employee: Omit<Employee, "id">) => {
   const employees = getEmployees();
   // Kiểm tra họ tên
-  if (!/^[a-zA-Z\s]+$/.test(employee.fullName)) {
-    message.error("Họ tên không được chứa ký tự đặc biệt!");
+  if (!/^[^\@\#\$\%\^\&\*\(\)\!\+\=]+$/.test(employee.fullName)) {
+    message.error("Họ tên không được chứa ký tự đặc biệt như @, !, ...!");
     return false;
   }
   if (employee.fullName.length > 50) {
@@ -38,8 +46,8 @@ export const updateEmployee = (id: string, updatedEmployee: Omit<Employee, "id">
   const employeeIndex = employees.findIndex((e) => e.id === id);
   if (employeeIndex === -1) return false;
   // Kiểm tra họ tên
-  if (!/^[a-zA-Z\s]+$/.test(updatedEmployee.fullName)) {
-    message.error("Họ tên không được chứa ký tự đặc biệt!");
+  if (!/^[^\@\#\$\%\^\&\*\(\)\!\+\=]+$/.test(updatedEmployee.fullName)) {
+    message.error("Họ tên không được chứa ký tự đặc biệt như @, !, ...!");
     return false;
   }
   if (updatedEmployee.fullName.length > 50) {
